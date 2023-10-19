@@ -10,10 +10,6 @@ const { MongoClient,ObjectId, ServerApiVersion } = require('mongodb');
 app.use(cors());
 app.use(express.json());
 
-// GadgetGear
-// STu2gOSpwsC88fCa
-// const uri = "mongodb://localhost:27017";
-
 
 
 const uri = "mongodb+srv://GadgetGear:STu2gOSpwsC88fCa@cluster0.t245pno.mongodb.net/?retryWrites=true&w=majority";
@@ -88,7 +84,6 @@ async function run() {
       const result = await productCollection.updateOne(filter, coffee, filter)
       res.send(result)
   })
-
 
 
     app.delete('/items/:id', async (req, res) => {
