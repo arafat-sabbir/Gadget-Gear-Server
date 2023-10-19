@@ -33,10 +33,15 @@ async function run() {
     await client.connect();
     const brandCollection = client.db("brandDB").collection('brandCollection');
     const productCollection = client.db("productDB").collection('productCollection')
+    const cartCollection = client.db("cartDB").collection('cartCollection')
 
     app.get('/brand', async (req, res) => {
       const cursor = brandCollection.find();
       const result = await cursor.toArray();
+      res.send(result)
+    })
+    app.get('/cart', async (req, res) => {
+      const result = await cartCollection.find().toArray();
       res.send(result)
     })
     app.get('/product/:brandname',async(req,res)=>{
@@ -56,6 +61,11 @@ async function run() {
     app.post('/product',async(req,res)=>{
       const product = req.body;
       const result = await productCollection.insertOne(product)
+      res.send(result)
+    })
+    app.post('/cart',async(req,res)=>{
+      const product = req.body;
+      const result = await cartCollection.insertOne(product)
       res.send(result)
     })
 
@@ -94,7 +104,7 @@ async function run() {
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
-    // Ensures that the client will close when you finish/error
+    // Ensures that the client will close when you finish
   }
 }
 run().catch(console.dir);
