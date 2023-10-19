@@ -59,23 +59,23 @@ async function run() {
       res.send(result)
     })
 
-    app.put('/coffee/:id', async (req, res) => {
+    app.put('/product/:id', async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) }
       const objects = { upsert: true };
-      const updatedCoffee = req.body;
+      const updateProduct = req.body;
       const coffee = {
           $set: {
-              name: updatedCoffee.name,
-              chef: updatedCoffee.chef,
-              supplier: updatedCoffee.supplier,
-              taste: updatedCoffee.taste,
-              category: updatedCoffee.category,
-              detail: updatedCoffee.detail,
-              photourl: updatedCoffee.photourl
+              name: updateProduct.name,
+              type: updateProduct.type,
+              print: updateProduct.price,
+              brandName: updateProduct.brandName,
+              description: updateProduct.description,
+              rating: updateProduct.rating,
+              image: updateProduct.image
           }
       }
-      const result = await coffeeCollection.updateOne(filter, coffee, filter)
+      const result = await productCollection.updateOne(filter, coffee, filter)
       res.send(result)
   })
 
