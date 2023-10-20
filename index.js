@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 require('dotenv').config();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 const { MongoClient,ObjectId, ServerApiVersion } = require('mongodb');
 
 // middleware
@@ -26,7 +26,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     const brandCollection = client.db("brandDB").collection('brandCollection');
     const productCollection = client.db("productDB").collection('productCollection')
     const cartCollection = client.db("cartDB").collection('cartCollection')
@@ -36,10 +36,13 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result)
     })
-    app.get('/cart', async (req, res) => {
-      const result = await cartCollection.find().toArray();
+    app.get('/cart/:id', async (req, res) => {
+      const email = req.params.id;
+      const query = {userEmail:email}
+      const result = await cartCollection.find(query).toArray();
       res.send(result)
     })
+
     app.get('/product/:brandname',async(req,res)=>{
       const brand = req.params.brandname;
       const query = {brandName:brand};
@@ -61,6 +64,7 @@ async function run() {
     })
     app.post('/cart',async(req,res)=>{
       const product = req.body;
+      console.log(product);
       const result = await cartCollection.insertOne(product)
       res.send(result)
     })
